@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "This is a Self inspired project for a task i was assigned during my internship.",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
