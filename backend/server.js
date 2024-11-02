@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 import db from "./config/db.js";
 import dotenv from "dotenv";
-// import userRoutes from "./routes/userRoutes.js";
-// import advertisementRoutes from "./routes/advertisementRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import advertisementRoutes from "./routes/advertisementRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 // import errorHandler from "./middleware/errorHandler.js";
 
@@ -21,8 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // User routes
 app.use("/api/auth", authRoutes);
-// app.use("/api/users", userRoutes);
-// app.use("/api/advertisements", advertisementRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/advertisements", advertisementRoutes);
 
 // Basic Route
 app.get("/", (req, res) => {

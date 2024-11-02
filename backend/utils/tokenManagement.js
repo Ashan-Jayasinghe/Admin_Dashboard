@@ -1,7 +1,7 @@
 import db from "../config/db.js"; // Adjust this import according to your setup
 
 // Function to save token in the database
-const saveToken = async (userId, token, expiresAt) => {
+export const saveToken = async (userId, token, expiresAt) => {
   await db.query(
     "INSERT INTO user_tokens (user_id, token, expires_at) VALUES (?, ?, ?)",
     [userId, token, expiresAt]
@@ -40,3 +40,5 @@ export const revokeUserTokens = async (userId) => {
 };
 
 i;
+
+export default tokenManagement;

@@ -320,3 +320,6 @@ export const logout = async (req, res) => {
     .status(200)
     .json({ status: "success", message: "Logged out successfully" });
 };
+
+
+export default authController;

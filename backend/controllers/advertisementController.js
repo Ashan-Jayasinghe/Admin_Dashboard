@@ -386,3 +386,6 @@ export const reactivateAdvertisement = async (req, res) => {
       });
   }
 };
+
+
+export default advertisementController;
