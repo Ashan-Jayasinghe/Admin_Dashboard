@@ -39,6 +39,3 @@ export const revokeUserTokens = async (userId) => {
   ]);
 };
 
-i;
-
-export default tokenManagement;

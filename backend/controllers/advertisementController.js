@@ -110,13 +110,11 @@ export const getAdvertisementsByCategory = async (req, res) => {
     res.status(200).json({ status: "success", data: Object.values(ads) });
   } catch (error) {
     console.error("Error fetching advertisements:", error);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Failed to fetch advertisements",
-        error,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch advertisements",
+      error,
+    });
   }
 };
 
@@ -221,13 +219,11 @@ export const getAllAdvertisements = async (req, res) => {
     res.status(200).json({ status: "success", data: Object.values(ads) });
   } catch (error) {
     console.error("Error fetching all advertisements:", error);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Failed to fetch advertisements",
-        error,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Failed to fetch advertisements",
+      error,
+    });
   }
 };
 
@@ -262,24 +258,20 @@ export const deleteAdvertisement = async (req, res) => {
     // Commit the transaction if all deletions succeed
     await connection.commit();
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message:
-          "Advertisement and related saved ads (if any) deleted successfully",
-      });
+    res.status(200).json({
+      status: "success",
+      message:
+        "Advertisement and related saved ads (if any) deleted successfully",
+    });
   } catch (error) {
     // Rollback if any error occurs
     await connection.rollback();
     console.error("Error deleting advertisement:", error);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Failed to delete advertisement",
-        error,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Failed to delete advertisement",
+      error,
+    });
   } finally {
     // Release the connection back to the pool
     connection.release();
@@ -306,12 +298,10 @@ export const deactivateAdvertisement = async (req, res) => {
 
     // If the advertisement is already deactivated, return a message indicating so
     if (adResult[0].is_active === 0) {
-      return res
-        .status(400)
-        .json({
-          status: "error",
-          message: "Advertisement is already deactivated",
-        });
+      return res.status(400).json({
+        status: "error",
+        message: "Advertisement is already deactivated",
+      });
     }
 
     // Step 2: Proceed to deactivate the advertisement by setting is_active to 0
@@ -320,21 +310,17 @@ export const deactivateAdvertisement = async (req, res) => {
       [adId]
     );
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "Advertisement deactivated successfully",
-      });
+    res.status(200).json({
+      status: "success",
+      message: "Advertisement deactivated successfully",
+    });
   } catch (error) {
     console.error("Error deactivating advertisement:", error);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Failed to deactivate advertisement",
-        error,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Failed to deactivate advertisement",
+      error,
+    });
   }
 };
 
@@ -369,23 +355,16 @@ export const reactivateAdvertisement = async (req, res) => {
       [adId]
     );
 
-    res
-      .status(200)
-      .json({
-        status: "success",
-        message: "Advertisement reactivated successfully",
-      });
+    res.status(200).json({
+      status: "success",
+      message: "Advertisement reactivated successfully",
+    });
   } catch (error) {
     console.error("Error reactivating advertisement:", error);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Failed to reactivate advertisement",
-        error,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Failed to reactivate advertisement",
+      error,
+    });
   }
 };
-
-
-export default advertisementController;

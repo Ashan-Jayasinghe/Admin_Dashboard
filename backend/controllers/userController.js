@@ -182,5 +182,3 @@ export const deleteUser = async (req, res) => {
       .json({ status: "error", message: "Failed to delete user", error });
   }
 };
-
-export default userController;

@@ -248,12 +248,10 @@ export const deleteAccount = async (req, res) => {
       await revokeToken(token);
 
       // Respond with success
-      return res
-        .status(200)
-        .json({
-          status: "success",
-          message: "Account deactivated successfully",
-        });
+      return res.status(200).json({
+        status: "success",
+        message: "Account deactivated successfully",
+      });
     } else if (requesterRole === "admin") {
       // Admin is deactivating another user's account
       const [rows] = await db.query("SELECT * FROM admin_users WHERE id = ?", [
@@ -276,30 +274,24 @@ export const deleteAccount = async (req, res) => {
       await revokeUserTokens(userId); // Function to revoke all tokens for the user
 
       // Respond with success
-      return res
-        .status(200)
-        .json({
-          status: "success",
-          message: `User ID ${userId} deactivated successfully`,
-        });
+      return res.status(200).json({
+        status: "success",
+        message: `User ID ${userId} deactivated successfully`,
+      });
     } else {
       // If the requester is not the user and not an admin
-      return res
-        .status(403)
-        .json({
-          status: "error",
-          message: "Insufficient permissions to deactivate this account",
-        });
+      return res.status(403).json({
+        status: "error",
+        message: "Insufficient permissions to deactivate this account",
+      });
     }
   } catch (error) {
     console.error("Error deactivating account:", error);
-    res
-      .status(500)
-      .json({
-        status: "error",
-        message: "Failed to deactivate account",
-        error,
-      });
+    res.status(500).json({
+      status: "error",
+      message: "Failed to deactivate account",
+      error,
+    });
   }
 };
 
@@ -320,6 +312,3 @@ export const logout = async (req, res) => {
     .status(200)
     .json({ status: "success", message: "Logged out successfully" });
 };
-
-
-export default authController;
