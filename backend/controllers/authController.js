@@ -117,19 +117,25 @@ export const updateUserRole = async (req, res) => {
   const userId = req.params.id; // ID from URL
   const { role } = req.body; // New role from request body
   const requesterId = req.user.userId; // ID of the user making the request
-  console.log(requesterId);
-  console.log(userId);
+
   try {
-    await db.query("UPDATE admin_users SET role = ? WHERE id = ?", [
-      role,
-      userId,
-    ]);
+    // Check if the user exists
+    const [userExists] = await db.query("SELECT 1 FROM admin_users WHERE id = ?", [userId]);
+
+    // If the user doesn't exist, return an error response
+    if (userExists.length === 0) {
+      return res.status(404).json({ status: "error", message: "User not exist" });
+    }
+
+    // Proceed to update the role if the user exists
+    await db.query("UPDATE admin_users SET role = ? WHERE id = ?", [role, userId]);
+
     // If the user is updating their own role, generate a new token
     if (userId == requesterId) {
       const newToken = jwt.sign(
-        { userId: requesterId, role: role }, // Payload with new role
-        process.env.JWT_SECRET, // Your JWT secret
-        { expiresIn: "1h" } // Expiration time
+        { userId: requesterId, role: role },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
       );
 
       // Update the stored token in the database
@@ -142,7 +148,7 @@ export const updateUserRole = async (req, res) => {
       return res.status(200).json({
         status: "success",
         message: "Your role has been updated successfully",
-        token: newToken, // Send the new token
+        token: newToken,
       });
     }
 
@@ -152,9 +158,7 @@ export const updateUserRole = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating user role:", error);
-    res
-      .status(500)
-      .json({ status: "error", message: "Failed to update user role", error });
+    res.status(500).json({ status: "error", message: "Failed to update user role", error });
   }
 };
 
