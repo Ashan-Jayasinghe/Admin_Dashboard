@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import advertisementRoutes from "./routes/advertisementRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-// import errorHandler from "./middleware/errorHandler.js";
+import errorHandler from "./middleware/errorHandler.js";
 
 // Load environment variables
 dotenv.config({ path: "./.env" });
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
 });
 
 // Error handling middleware should be the last middleware
-// app.use(errorHandler);
+app.use(errorHandler);
 
 // Listen on PORT
 app.listen(PORT, () => {
