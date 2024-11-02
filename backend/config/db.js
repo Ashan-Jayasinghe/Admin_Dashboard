@@ -1,8 +1,8 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
 
-dotenv.config(); // Load environment variables
-
+dotenv.config({ path: "../.env" }); // Load environment variables
+console.log(process.env.DB_PORT);
 // Create a MySQL connection pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
