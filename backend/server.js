@@ -4,7 +4,7 @@ import db from "./config/db.js";
 import dotenv from "dotenv";
 // import userRoutes from "./routes/userRoutes.js";
 // import advertisementRoutes from "./routes/advertisementRoutes.js";
-// import authRoutes from "./routes/authRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 // import errorHandler from "./middleware/errorHandler.js";
 
 // Load environment variables
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // User routes
-// app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 // app.use("/api/users", userRoutes);
 // app.use("/api/advertisements", advertisementRoutes);
 
