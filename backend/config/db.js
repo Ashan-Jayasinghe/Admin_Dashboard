@@ -1,7 +1,9 @@
 import mysql from "mysql2";
 import dotenv from "dotenv";
 
-//load env variables
+dotenv.config(); // Load environment variables
+
+// Create a MySQL connection pool
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -13,5 +15,15 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-//export the pool as a promise
+// Test the database connection
+pool.getConnection((err, connection) => {
+  if (err) {
+    console.error("Database connection failed:", err.message);
+  } else {
+    console.log("Database connected successfully");
+    connection.release(); // Release the connection back to the pool
+  }
+});
+
+// Export the pool as a promise
 export default pool.promise();
