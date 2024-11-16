@@ -10,8 +10,20 @@ import {
 } from "../middleware/validation.js";
 import { verifyToken } from "../middleware/authMiddleware.js";
 import roleMiddleware from "../middleware/roleMiddleware.js";
+import profileImageUpload from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
+
+// Get user profile route
+router.get("/profile", verifyToken, authController.getUserProfile);
+
+//profile update route with image upload
+router.put(
+  "/image",
+  verifyToken,
+  profileImageUpload,
+  authController.updateImage
+);
 
 // Admin dashboard user routes
 router.post(

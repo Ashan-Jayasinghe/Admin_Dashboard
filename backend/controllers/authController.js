@@ -8,6 +8,51 @@ import {
   saveToken,
 } from "../utils/tokenManagement.js";
 
+// Function to get the user's profile information
+export const getUserProfile = async (req, res) => {
+  const userId = req.user.userId; // Assuming the user's ID is stored in the token
+
+  try {
+    // Fetch the user's details from the database, including created_at and updated_at
+    const [user] = await db.query(
+      "SELECT id, username, email, role, created_at, updated_at, image_url FROM admin_users WHERE id = ? AND is_active = 1",
+      [userId]
+    );
+
+    if (user.length === 0) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
+    // Assuming images are stored in the 'uploads/profiles' folder
+    const baseUrl = "http://localhost:5001";
+
+    // Prepend the base URL to the image URL stored in the database
+    const userProfile = user[0];
+    if (userProfile.image_url) {
+      userProfile.image_url = `${baseUrl}${userProfile.image_url}`;
+    } else {
+      userProfile.image_url = `${baseUrl}default.jpg`; // Provide a default image URL if none exists
+    }
+
+    // Return the user's profile information along with the complete image URL
+    return res.status(200).json({
+      status: "success",
+      message: "User profile fetched successfully",
+      user: userProfile, // Return the user profile with the full image URL
+    });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    return res.status(500).json({
+      status: "error",
+      message: "Failed to fetch user profile",
+      error,
+    });
+  }
+};
+
 // Signup function for registering a new admin user
 export const signup = async (req, res) => {
   const { username, email, password, role } = req.body;
@@ -120,15 +165,23 @@ export const updateUserRole = async (req, res) => {
 
   try {
     // Check if the user exists
-    const [userExists] = await db.query("SELECT 1 FROM admin_users WHERE id = ?", [userId]);
+    const [userExists] = await db.query(
+      "SELECT 1 FROM admin_users WHERE id = ?",
+      [userId]
+    );
 
     // If the user doesn't exist, return an error response
     if (userExists.length === 0) {
-      return res.status(404).json({ status: "error", message: "User not exist" });
+      return res
+        .status(404)
+        .json({ status: "error", message: "User not exist" });
     }
 
     // Proceed to update the role if the user exists
-    await db.query("UPDATE admin_users SET role = ? WHERE id = ?", [role, userId]);
+    await db.query("UPDATE admin_users SET role = ? WHERE id = ?", [
+      role,
+      userId,
+    ]);
 
     // If the user is updating their own role, generate a new token
     if (userId == requesterId) {
@@ -158,7 +211,9 @@ export const updateUserRole = async (req, res) => {
     });
   } catch (error) {
     console.error("Error updating user role:", error);
-    res.status(500).json({ status: "error", message: "Failed to update user role", error });
+    res
+      .status(500)
+      .json({ status: "error", message: "Failed to update user role", error });
   }
 };
 
@@ -315,4 +370,39 @@ export const logout = async (req, res) => {
   res
     .status(200)
     .json({ status: "success", message: "Logged out successfully" });
+};
+
+// Function to update the user's profile image
+// Function to update the user's profile image
+export const updateImage = async (req, res) => {
+  const userId = req.user.userId; // Get the userId from the token
+  if (!req.file) {
+    return res
+      .status(400)
+      .json({ status: "error", message: "No image uploaded" });
+  }
+
+  const imageUrl = `/uploads/profiles/${req.file.filename}`; // Construct image URL from the file name
+
+  try {
+    // Update the user's profile image URL in the database
+    await db.query("UPDATE admin_users SET image_url = ? WHERE id = ?", [
+      imageUrl,
+      userId,
+    ]);
+
+    // Respond with a success message
+    res.status(200).json({
+      status: "success",
+      message: "Profile image updated successfully",
+      imageUrl: imageUrl,
+    });
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Failed to update profile image",
+      error,
+    });
+  }
 };

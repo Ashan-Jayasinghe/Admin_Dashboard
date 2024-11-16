@@ -13,7 +13,7 @@ export const getAdvertisementsByCategory = async (req, res) => {
       SELECT a.*, i.image_path
       FROM advertisements a
       LEFT JOIN advertisement_images i ON a.id = i.advertisement_id
-      WHERE a.category = ? AND a.is_active = 1
+      WHERE a.category = ? 
     `;
 
     // Add subcategory to query if it's provided
@@ -128,7 +128,6 @@ export const getAllAdvertisements = async (req, res) => {
       SELECT a.*, i.image_path
       FROM advertisements a
       LEFT JOIN advertisement_images i ON a.id = i.advertisement_id
-      WHERE a.is_active = 1
     `;
     const [adsRows] = await db.query(adsQuery);
 

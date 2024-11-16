@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import advertisementRoutes from "./routes/advertisementRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
+import path from "path";
 
 // Load environment variables
 dotenv.config({ path: "./.env" });
@@ -18,6 +19,11 @@ console.log(PORT);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+// Serve static files from the 'uploads' directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // User routes
 app.use("/api/auth", authRoutes);
