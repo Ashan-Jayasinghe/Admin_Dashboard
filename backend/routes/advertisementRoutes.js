@@ -31,4 +31,5 @@ router.put(
   advertisementController.reactivateAdvertisement
 );
 
+
 export default router;

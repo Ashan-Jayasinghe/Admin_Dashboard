@@ -6,6 +6,7 @@ import userRoutes from "./routes/userRoutes.js";
 import advertisementRoutes from "./routes/advertisementRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import errorHandler from "./middleware/errorHandler.js";
+import reportRoutes from "./routes/reportRoutes.js";
 import path from "path";
 
 // Load environment variables
@@ -28,6 +29,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 // User routes
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/reports", reportRoutes)
 app.use("/api/advertisements", advertisementRoutes);
 
 // Basic Route
