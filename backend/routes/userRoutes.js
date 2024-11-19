@@ -7,7 +7,7 @@ const router = express.Router();
 
 // Get all users
 router.get("/", verifyToken, userController.getAllUsers);
-
+router.get("/user-info",verifyToken, userController.getAllUsersWithAdCounts)
 // Get a single user by ID
 router.get("/:id", verifyToken, userController.getUserById);
 
